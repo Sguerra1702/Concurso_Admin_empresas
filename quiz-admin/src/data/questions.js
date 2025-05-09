@@ -469,7 +469,7 @@ export const questions = {
           "C) Industrias Alimenticias de Colombia",
           "D) Chocolates de Antioquia S.A.",
         ],
-        correctAnswer: 0,
+        correctAnswer: 1,
         points: 15,
         difficulty: "easy",
       },

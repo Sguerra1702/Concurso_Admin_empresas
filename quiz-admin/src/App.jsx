@@ -5,6 +5,8 @@ import RouletteAnswer from "./components/RouletteAnswer/RouletteAnswer";
 import AnswerAlert from "./components/AnswerAlert/AnswerAlert";
 import TimeUpAlert from "./components/TimeUpAlert/TimeUpAlert";
 import RoundEnd from "./components/RoundEnd/RoundEnd";
+import GameEnd from "./components/GameEnd/GameEnd";
+import GameComplete from "./components/GameComplete/GameComplete";
 import CountdownModal from "./components/CountdownModal/CountdownModal";
 import Home from "./components/Home/Home";
 import Rules from "./components/Rules/Rules";
@@ -48,7 +50,7 @@ const ControlButton = styled.button`
   &:hover {
     background-color: #45a049;
     transform: translateY(-2px);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   }
 
   &:active {
@@ -66,15 +68,15 @@ const ButtonContainer = styled.div`
 
 // Define application states
 const APP_STATES = {
-  HOME: 'home',
-  RULES: 'rules',
-  GAME: 'game'
+  HOME: "home",
+  RULES: "rules",
+  GAME: "game",
 };
 
 function App() {
   // App state management
   const [appState, setAppState] = useState(APP_STATES.HOME);
-  
+
   // Game state
   const [currentRound, setCurrentRound] = useState(1);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -86,9 +88,12 @@ function App() {
   const [showAnswerTimer, setShowAnswerTimer] = useState(false);
   const [showTimeUpAlert, setShowTimeUpAlert] = useState(false);
   const [showRoundEnd, setShowRoundEnd] = useState(false);
+  const [showGameEnd, setShowGameEnd] = useState(false);
+  const [showGameComplete, setShowGameComplete] = useState(false);
   const [showCountdown, setShowCountdown] = useState(false);
   const [nextRound, setNextRound] = useState(1); // Track the next round to switch to
-  const [isTransitioningToNextRound, setIsTransitioningToNextRound] = useState(false);
+  const [isTransitioningToNextRound, setIsTransitioningToNextRound] =
+    useState(false);
 
   // Handle transitions between app states
   const handleStartGame = () => {
@@ -105,7 +110,7 @@ function App() {
   const showRouletteAnswer = () => {
     setShowRoulette(true);
   };
-  
+
   // Botón para iniciar la fase de respuesta (reemplaza al timer de lectura)
   const handleStartAnswering = () => {
     setShowAnswerAlert(true);
@@ -158,14 +163,13 @@ function App() {
       setTimerKey((prev) => prev + 1);
     } else {
       if (currentRound < 3) {
-        // Store the next round number
+        // Rondas 1 y 2 - ir a la siguiente ronda
         setNextRound(currentRound + 1);
-        // Show round end screen
         setShowRoundEnd(true);
       } else {
+        // Final de la ronda 3 - mostrar pantalla de fin de juego
         console.log("Juego terminado");
-        // Here you could implement game end logic or return to home
-        setAppState(APP_STATES.HOME);
+        setShowGameEnd(true);
       }
     }
   };
@@ -178,15 +182,15 @@ function App() {
     setShowRoundEnd(false);
     setShowCountdown(true);
   };
-  
+
   const handleCountdownComplete = () => {
     setShowCountdown(false);
-    
+
     // If coming from Rules screen, change to Game state
     if (appState === APP_STATES.RULES) {
       setAppState(APP_STATES.GAME);
     }
-    
+
     // Reset game state for a new round/question
     setCurrentQuestion(0);
     setShowRoulette(false);
@@ -195,7 +199,28 @@ function App() {
     setShowTimeUpAlert(false);
     setShowRoundEnd(false);
     setIsTransitioningToNextRound(false);
-    setTimerKey(prev => prev + 1);
+    setTimerKey((prev) => prev + 1);
+  };
+
+  const handleFinishGame = () => {
+    setShowGameEnd(false);
+    setShowGameComplete(true);
+  };
+
+  const handleReturnHome = () => {
+    setShowGameComplete(false);
+    setAppState(APP_STATES.HOME);
+    setCurrentRound(1);
+    setCurrentQuestion(0);
+    // Reset de todos los demás estados
+    setShowRoulette(false);
+    setShowNextButton(false);
+    setShowAnswerAlert(false);
+    setShowAnswerTimer(false);
+    setShowTimeUpAlert(false);
+    setShowRoundEnd(false);
+    setShowCountdown(false);
+    setNextRound(1);
   };
 
   const getCurrentQuestion = () => {
@@ -217,100 +242,108 @@ function App() {
       ];
     }
   };
-  
+
   const testRoundEnd = () => {
     setNextRound(currentRound + 1); // Set next round when testing
     setShowRoundEnd(true);
   };
-  
+
   const testCountdown = () => {
     setShowCountdown(true);
   };
 
+  const testGameEnd = () => {
+    setShowGameEnd(true);
+  };
+
   // For debugging
   useEffect(() => {
-    console.log(`Current round: ${currentRound}, Next round: ${nextRound}, Question: ${currentQuestion}`);
+    console.log(
+      `Current round: ${currentRound}, Next round: ${nextRound}, Question: ${currentQuestion}`
+    );
   }, [currentRound, nextRound, currentQuestion]);
 
   return (
     <div className="app">
       <header className="header">
-        {appState === APP_STATES.GAME && (
-          <div style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 2000 }}>
-            <button onClick={testRoundEnd} style={{ marginRight: '10px' }}>Test Round End</button>
-            <button onClick={testCountdown}>Test Countdown</button>
-            <div style={{ color: 'white', marginTop: '5px' }}>
-              Round: {currentRound}, Question: {currentQuestion + 1}
-            </div>
-          </div>
-        )}
       </header>
 
       <main>
-        {appState === APP_STATES.HOME && (
-          <Home onStartGame={handleStartGame} />
-        )}
+        {appState === APP_STATES.HOME && <Home onStartGame={handleStartGame} />}
 
         {appState === APP_STATES.RULES && !showCountdown && (
           <Rules onStartFirstRound={handleStartFirstRound} />
         )}
 
-        {appState === APP_STATES.GAME && !showRoundEnd && !showCountdown && (
-          <>
-            <Question question={getCurrentQuestion()} highlighted={showRoulette} />
+        {appState === APP_STATES.GAME &&
+          !showRoundEnd &&
+          !showCountdown &&
+          !showGameEnd &&
+          !showGameComplete && (
+            <>
+              <Question
+                question={getCurrentQuestion()}
+                highlighted={showRoulette}
+              />
 
-            {!showRoulette && !showAnswerAlert && !showAnswerTimer && !showTimeUpAlert && (
-              <ButtonContainer>
-                <ControlButton onClick={handleStartAnswering}>
-                  Comenzar a responder
-                </ControlButton>
-              </ButtonContainer>
-            )}
+              {!showRoulette &&
+                !showAnswerAlert &&
+                !showAnswerTimer &&
+                !showTimeUpAlert && (
+                  <ButtonContainer>
+                    <ControlButton onClick={handleStartAnswering}>
+                      Comenzar a responder
+                    </ControlButton>
+                  </ButtonContainer>
+                )}
 
-            {!showRoulette && !showAnswerAlert && showAnswerTimer && !showTimeUpAlert && (
-              <>
-                <Timer
-                  key={timerKey}
-                  initialTime={30} // Solo el temporizador de 30 segundos
-                  onTimeUp={handleAnswerTimeUp}
-                />
+              {!showRoulette &&
+                !showAnswerAlert &&
+                showAnswerTimer &&
+                !showTimeUpAlert && (
+                  <>
+                    <Timer
+                      key={timerKey}
+                      initialTime={30} // Solo el temporizador de 30 segundos
+                      onTimeUp={handleAnswerTimeUp}
+                    />
 
-                <ButtonContainer>
-                  <ControlButton onClick={handleSkipTimer}>
-                    Todos han respondido
-                  </ControlButton>
-                </ButtonContainer>
-              </>
-            )}
-
-            {showAnswerAlert && (
-              <AnswerAlert onComplete={handleAnswerAlertComplete} />
-            )}
-
-            {showTimeUpAlert && (
-              <TimeUpAlert onComplete={handleTimeUpAlertComplete} />
-            )}
-
-            {showRoulette && (
-              <ModalOverlay>
-                <div>
-                  <RouletteAnswer
-                    options={getCurrentQuestion().options}
-                    correctAnswer={getCurrentQuestion().correctAnswer}
-                    onComplete={handleRouletteComplete}
-                  />
-                  {showNextButton && (
                     <ButtonContainer>
-                      <ControlButton onClick={handleNextQuestion}>
-                        Siguiente Pregunta
+                      <ControlButton onClick={handleSkipTimer}>
+                        Todos han respondido
                       </ControlButton>
                     </ButtonContainer>
-                  )}
-                </div>
-              </ModalOverlay>
-            )}
-          </>
-        )}
+                  </>
+                )}
+
+              {showAnswerAlert && (
+                <AnswerAlert onComplete={handleAnswerAlertComplete} />
+              )}
+
+              {showTimeUpAlert && (
+                <TimeUpAlert onComplete={handleTimeUpAlertComplete} />
+              )}
+
+              {showRoulette && (
+                <ModalOverlay>
+                  <div>
+                    <RouletteAnswer
+                      options={getCurrentQuestion().options}
+                      correctAnswer={getCurrentQuestion().correctAnswer}
+                      onComplete={handleRouletteComplete}
+                    />
+                    {showNextButton && (
+                      <ButtonContainer>
+                        <ControlButton onClick={handleNextQuestion}>
+                          Siguiente Pregunta
+                        </ControlButton>
+                      </ButtonContainer>
+                    )}
+                  </div>
+                </ModalOverlay>
+              )}
+            </>
+          )}
 
         {appState === APP_STATES.GAME && showRoundEnd && (
           <RoundEnd
@@ -318,6 +351,12 @@ function App() {
             onStartNextRound={handleStartNextRound}
           />
         )}
+
+        {appState === APP_STATES.GAME && showGameEnd && (
+          <GameEnd onFinishGame={handleFinishGame} />
+        )}
+
+        {showGameComplete && <GameComplete onReturnHome={handleReturnHome} />}
 
         {/* The CountdownModal can appear in either Rules or Game state */}
         {showCountdown && (

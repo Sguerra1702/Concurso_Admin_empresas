@@ -854,3 +854,43 @@ label {
     font-size: 0.9rem;
   }
 }
+
+/* Estilos para el selector de total de preguntas */
+.total-preguntas-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border: 1px solid #444;
+}
+
+.total-preguntas-container label {
+  font-weight: bold;
+  color: #ecf0f1;
+}
+
+#totalPreguntasSelect {
+  background-color: #3a3a3a;
+  color: #ecf0f1;
+  border: 1px solid #555;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+#totalPreguntasSelect:hover, 
+#totalPreguntasSelect:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+#totalPreguntasSelect option {
+  background-color: #2a2a2a;
+  color: #ecf0f1;
+}

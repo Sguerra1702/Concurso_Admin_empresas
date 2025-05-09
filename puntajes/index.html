@@ -55,17 +55,35 @@
           </div>
         </div>
 
-        <!-- Paso 3: Distribución de preguntas (era paso 4) -->
+        <!-- Paso 3: Distribución de Preguntas (13 o 15 preguntas) -->
         <div id="paso3" class="form-section">
-          <h2>Distribución de Preguntas (Total: 15)</h2>
+          <h2>Distribución de Preguntas</h2>
           <div class="puntaje-info">
             <h3>Sistema de puntuación:</h3>
             <ul>
-              <li><strong>Preguntas fáciles:</strong> +15 pts (correcta) / -8 pts (incorrecta)</li>
-              <li><strong>Preguntas medias:</strong> +20 pts (correcta) / -5 pts (incorrecta)</li>
-              <li><strong>Preguntas difíciles:</strong> +35 pts (correcta) / -2 pts (incorrecta)</li>
+              <li>
+                <strong>Preguntas fáciles:</strong> +15 pts (correcta) / -8 pts
+                (incorrecta)
+              </li>
+              <li>
+                <strong>Preguntas medias:</strong> +20 pts (correcta) / -5 pts
+                (incorrecta)
+              </li>
+              <li>
+                <strong>Preguntas difíciles:</strong> +35 pts (correcta) / -2
+                pts (incorrecta)
+              </li>
             </ul>
           </div>
+
+          <div class="total-preguntas-container">
+            <label for="totalPreguntasSelect">Total de preguntas:</label>
+            <select id="totalPreguntasSelect" name="totalPreguntasSelect">
+              <option value="13">13 preguntas</option>
+              <option value="15" selected>15 preguntas</option>
+            </select>
+          </div>
+
           <p class="note">
             Las preguntas se presentarán en orden: primero fáciles, luego medias
             y finalmente difíciles.
