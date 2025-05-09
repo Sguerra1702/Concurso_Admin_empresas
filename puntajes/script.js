@@ -31,10 +31,10 @@ if (isConfigPage) {
   const equiposValue = document.getElementById("equiposValue");
   const equiposContainer = document.getElementById("equiposContainer");
   const totalPreguntasSelect = document.getElementById("totalPreguntasSelect");
-const preguntasFacil = document.getElementById("preguntasFacil");
-const preguntasMedio = document.getElementById("preguntasMedio");
-const preguntasDificil = document.getElementById("preguntasDificil");
-const totalPreguntasEl = document.getElementById("totalPreguntas");
+  const preguntasFacil = document.getElementById("preguntasFacil");
+  const preguntasMedio = document.getElementById("preguntasMedio");
+  const preguntasDificil = document.getElementById("preguntasDificil");
+  const totalPreguntasEl = document.getElementById("totalPreguntas");
 
   for (let i = 1; i <= totalSteps; i++) {
     const paso = document.getElementById(`paso${i}`);
@@ -169,19 +169,24 @@ const totalPreguntasEl = document.getElementById("totalPreguntas");
         }
         return true;
 
-        case 3:
-          // Validar distribución de preguntas
-          const faciles = parseInt(document.getElementById("preguntasFacil").value) || 0;
-          const medias = parseInt(document.getElementById("preguntasMedio").value) || 0;
-          const dificiles = parseInt(document.getElementById("preguntasDificil").value) || 0;
-          const totalPreguntasActual = parseInt(document.getElementById("totalPreguntasSelect").value);
-    
-          if (faciles + medias + dificiles !== totalPreguntasActual) {
-            alert(`El total de preguntas debe ser ${totalPreguntasActual}.`);
-            return false;
-          }
-    
-          return true;
+      case 3:
+        // Validar distribución de preguntas
+        const faciles =
+          parseInt(document.getElementById("preguntasFacil").value) || 0;
+        const medias =
+          parseInt(document.getElementById("preguntasMedio").value) || 0;
+        const dificiles =
+          parseInt(document.getElementById("preguntasDificil").value) || 0;
+        const totalPreguntasActual = parseInt(
+          document.getElementById("totalPreguntasSelect").value
+        );
+
+        if (faciles + medias + dificiles !== totalPreguntasActual) {
+          alert(`El total de preguntas debe ser ${totalPreguntasActual}.`);
+          return false;
+        }
+
+        return true;
     }
   }
 
@@ -197,7 +202,7 @@ const totalPreguntasEl = document.getElementById("totalPreguntas");
   }
 
   if (totalPreguntasSelect) {
-    totalPreguntasSelect.addEventListener("change", function() {
+    totalPreguntasSelect.addEventListener("change", function () {
       totalPreguntasRonda = parseInt(this.value);
       totalPreguntasEl.textContent = `Total: ${validarTotalPreguntas()} de ${totalPreguntasRonda} preguntas`;
       // Actualizar el color basado en si es válido o no
@@ -244,72 +249,76 @@ const totalPreguntasEl = document.getElementById("totalPreguntas");
     const faciles = parseInt(preguntasFacil.value) || 0;
     const medias = parseInt(preguntasMedio.value) || 0;
     const dificiles = parseInt(preguntasDificil.value) || 0;
-  
+
     const total = faciles + medias + dificiles;
     totalPreguntasEl.textContent = `Total: ${total} de ${totalPreguntasRonda} preguntas`;
-  
+
     if (total !== totalPreguntasRonda) {
       totalPreguntasEl.style.color = "red";
     } else {
       totalPreguntasEl.style.color = "green";
     }
-    
+
     return total;
   }
 
   // Evento submit actualizado con los puntajes predefinidos
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-  
+
     // Validar el último paso
     if (!validarPasoActual(3)) {
       return;
     }
-  
+
     const numEquipos = parseInt(document.getElementById("equiposRange").value);
     const equipos = [];
-    const totalPreguntasActual = parseInt(document.getElementById("totalPreguntasSelect").value);
-  
+    const totalPreguntasActual = parseInt(
+      document.getElementById("totalPreguntasSelect").value
+    );
+
     for (let i = 1; i <= numEquipos; i++) {
       const nombre = document.getElementById(`equipo${i}`).value;
       equipos.push({ id: i, nombre: nombre, puntaje: 0 });
     }
-  
+
     const faciles = parseInt(document.getElementById("preguntasFacil").value);
     const medias = parseInt(document.getElementById("preguntasMedio").value);
-    const dificiles = parseInt(document.getElementById("preguntasDificil").value);
-  
+    const dificiles = parseInt(
+      document.getElementById("preguntasDificil").value
+    );
+
     // Añadir el total de preguntas a la configuración
     configData = {
       equipos: equipos,
       puntos: {
         facil: PUNTOS_PREDEFINIDOS.facil.correcto,
         medio: PUNTOS_PREDEFINIDOS.medio.correcto,
-        dificil: PUNTOS_PREDEFINIDOS.dificil.correcto
+        dificil: PUNTOS_PREDEFINIDOS.dificil.correcto,
       },
       puntosIncorrectos: {
         facil: PUNTOS_PREDEFINIDOS.facil.incorrecto,
         medio: PUNTOS_PREDEFINIDOS.medio.incorrecto,
-        dificil: PUNTOS_PREDEFINIDOS.dificil.incorrecto
+        dificil: PUNTOS_PREDEFINIDOS.dificil.incorrecto,
       },
       preguntas: {
         facil: faciles,
         medio: medias,
         dificil: dificiles,
-        total: totalPreguntasActual
+        total: totalPreguntasActual,
       },
-      penalidad: 0 // No aplica penalidad por no responder
+      penalidad: 0, // No aplica penalidad por no responder
     };
-  
+
     tiposPregunta = [
       ...Array(configData.preguntas.facil).fill("facil"),
       ...Array(configData.preguntas.medio).fill("medio"),
       ...Array(configData.preguntas.dificil).fill("dificil"),
     ];
-  
+
     localStorage.setItem("competenciaConfig", JSON.stringify(configData));
     localStorage.setItem("tiposPregunta", JSON.stringify(tiposPregunta));
-  
+
     window.location.href = "game.html";
   });
 }
@@ -334,9 +343,10 @@ if (isGamePage) {
 
   function iniciarJuego() {
     document.getElementById("numeroPregunta").textContent = currentQuestion;
-  // Actualizar al total de preguntas configurado
-  document.getElementById("totalPreguntas").textContent = configData.preguntas.total;
-  actualizarTipoPregunta();
+    // Actualizar al total de preguntas configurado
+    document.getElementById("totalPreguntas").textContent =
+      configData.preguntas.total;
+    actualizarTipoPregunta();
 
     const equiposGrid = document.getElementById("equiposGrid");
     equiposGrid.innerHTML = "";
@@ -385,7 +395,6 @@ if (isGamePage) {
       btnIncorrecto.addEventListener("click", (e) =>
         seleccionarRespuesta(e.target)
       );
-
     });
 
     document
@@ -503,7 +512,11 @@ if (isGamePage) {
           nuevoValor = puntajeAnterior + puntosPregunta;
           break;
         case "incorrecto":
-          nuevoValor = puntajeAnterior + puntosIncorrectos; // Sumar puntaje negativo
+          // Calcular potencial nuevo valor
+          const potencialNuevoValor = puntajeAnterior + puntosIncorrectos; // puntosIncorrectos ya es negativo
+
+          // Asegurar que el puntaje no sea negativo
+          nuevoValor = Math.max(0, potencialNuevoValor);
           break;
         case "noresponde":
           nuevoValor = puntajeAnterior; // No cambia el puntaje
@@ -528,6 +541,7 @@ if (isGamePage) {
       setTimeout(mostrarResultadoFinal, 1000);
       return;
     }
+    respuestasSeleccionadas = {};
 
     document.querySelectorAll(".equipo-botones button").forEach((btn) => {
       btn.classList.remove("selected");
