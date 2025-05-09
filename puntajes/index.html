@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Configuración de Competencia</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Configuración de la Competencia</h1>
+
+      <form id="configForm">
+        <!-- Paso 1: Selección de número de equipos -->
+        <div id="paso1" class="form-section active">
+          <h2>Número de Equipos</h2>
+          <div class="num-equipos-selector">
+            <p>Selecciona el número de equipos participantes:</p>
+            <div class="equipos-slider-container">
+              <input
+                type="range"
+                id="equiposRange"
+                min="1"
+                max="8"
+                value="2"
+                class="equipos-slider"
+              />
+              <div class="equipos-value">
+                <span id="equiposValue">2</span> Equipos
+              </div>
+            </div>
+          </div>
+
+          <div class="nav-buttons">
+            <button type="button" id="paso1Next" class="next-btn">
+              Siguiente
+            </button>
+          </div>
+        </div>
+
+        <!-- Paso 2: Nombres de equipos -->
+        <div id="paso2" class="form-section">
+          <h2>Nombres de Equipos</h2>
+          <div id="equiposContainer">
+            <!-- Se generará dinámicamente -->
+          </div>
+
+          <div class="nav-buttons">
+            <button type="button" id="paso2Prev" class="prev-btn">
+              Anterior
+            </button>
+            <button type="button" id="paso2Next" class="next-btn">
+              Siguiente
+            </button>
+          </div>
+        </div>
+
+        <!-- Paso 3: Distribución de preguntas (era paso 4) -->
+        <div id="paso3" class="form-section">
+          <h2>Distribución de Preguntas (Total: 15)</h2>
+          <div class="puntaje-info">
+            <h3>Sistema de puntuación:</h3>
+            <ul>
+              <li><strong>Preguntas fáciles:</strong> +15 pts (correcta) / -8 pts (incorrecta)</li>
+              <li><strong>Preguntas medias:</strong> +20 pts (correcta) / -5 pts (incorrecta)</li>
+              <li><strong>Preguntas difíciles:</strong> +35 pts (correcta) / -2 pts (incorrecta)</li>
+            </ul>
+          </div>
+          <p class="note">
+            Las preguntas se presentarán en orden: primero fáciles, luego medias
+            y finalmente difíciles.
+          </p>
+          <div class="tipo-pregunta">
+            <label for="preguntasFacil">Fáciles:</label>
+            <input
+              type="number"
+              id="preguntasFacil"
+              name="preguntasFacil"
+              min="0"
+              max="15"
+              value="5"
+              required
+            />
+          </div>
+          <div class="tipo-pregunta">
+            <label for="preguntasMedio">Medias:</label>
+            <input
+              type="number"
+              id="preguntasMedio"
+              name="preguntasMedio"
+              min="0"
+              max="15"
+              value="5"
+              required
+            />
+          </div>
+          <div class="tipo-pregunta">
+            <label for="preguntasDificil">Difíciles:</label>
+            <input
+              type="number"
+              id="preguntasDificil"
+              name="preguntasDificil"
+              min="0"
+              max="15"
+              value="5"
+              required
+            />
+          </div>
+          <p id="totalPreguntas">Total: 15 preguntas</p>
+
+          <div class="nav-buttons">
+            <button type="button" id="paso3Prev" class="prev-btn">
+              Anterior
+            </button>
+            <button type="submit" id="comenzarBtn">Comenzar Ronda</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

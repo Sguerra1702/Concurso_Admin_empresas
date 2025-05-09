@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Competencia en Curso</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Sección principal del juego -->
+        <div id="game-section">
+            <header>
+                <div id="preguntaHeader">
+                    <h1>Pregunta <span id="numeroPregunta">1</span> de <span id="totalPreguntas">15</span></h1>
+                    <p id="tipoPregunta">Tipo: <span>Fácil</span></p>
+                    <p id="puntosActuales">Valor: <span>1</span> punto(s)</p>
+                </div>
+            </header>
+            
+            <!-- Grid de equipos con clase dinámica para adaptarse al número de equipos -->
+            <div id="equiposGrid" class="equipos-grid"></div>
+            
+            <div class="actions">
+                <button id="confirmarBtn" class="big-button">Confirmar Selección</button>
+            </div>
+        </div>
+        
+        <!-- Contenedor para resultados finales (inicialmente oculto) -->
+        <div id="resultados-section" class="resultados-section" style="display: none;">
+            <!-- Aquí se insertará dinámicamente la tabla de clasificación -->
+        </div>
+    </div>
+    
+    <!-- Template para la tabla de clasificación final -->
+    <template id="template-resultados">
+        <div class="resultado-final">
+            <h2>Resultados Finales</h2>
+            <p id="mensaje-ganador"></p>
+            
+            <div class="tabla-resultados">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Posición</th>
+                            <th>Equipo</th>
+                            <th>Puntaje</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultados-body">
+                        <!-- Filas generadas dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="botones-finales">
+                <button id="nuevaCompetencia" class="big-button">Nueva Competencia</button>
+            </div>
+        </div>
+    </template>
+    
+    <script src="script.js"></script>
+</body>
+</html>
